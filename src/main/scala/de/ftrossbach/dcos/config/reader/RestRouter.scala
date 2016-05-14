@@ -28,7 +28,11 @@ class RestRouter extends Directives {
   def route(repoFacade: ActorRef) = {
     implicit val timeout = Timeout(5 seconds)
 
-
+    pathPrefix("webapp") {
+      get {
+        getFromResourceDirectory("assets")
+      }
+    }~
     pathPrefix("api" / "repository") {
 
       pathEndOrSingleSlash {
@@ -70,6 +74,7 @@ class RestRouter extends Directives {
 
         }
     }
+
   }
 
   def marshal(m: => Future[Any]): StandardRoute =
@@ -81,7 +86,6 @@ class RestRouter extends Directives {
 
 
     })
-
 
 
 }

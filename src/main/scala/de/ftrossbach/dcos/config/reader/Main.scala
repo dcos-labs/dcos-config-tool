@@ -3,26 +3,34 @@ package de.ftrossbach.dcos.config.reader
 import java.net.URL
 
 import akka.actor.{ActorSystem, Props}
-import de.ftrossbach.dcos.config.reader.ConfigReader.{GetRepository, Update}
+import akka.http.scaladsl.Http
+import de.ftrossbach.dcos.config.reader.ConfigReader.Update
+import akka.http.scaladsl.server.Directives._
+import akka.http.scaladsl.server.Route
+import akka.stream.ActorMaterializer
+import de.ftrossbach.dcos.config.reader.RepositoryFacade.AddRepository
 
-import scala.concurrent.duration._
+import scala.concurrent.Future
+
 /**
   * Created by ftr on 13/05/16.
   */
 object Main {
-
+  implicit val system = ActorSystem("dcos-config")
   def main(args: Array[String]) {
 
 
-    val system =  ActorSystem("dcos-config")
+
+    val executor = system.dispatcher
+    implicit val materializer = ActorMaterializer()
     import system.dispatcher
 
-    val configReader = system.actorOf(Props[ConfigReader])
+    val facade = system.actorOf(Props[RepositoryFacade])
 
 
-    configReader ! Update(new URL("https://universe.mesosphere.com/repo"))
+    facade ! AddRepository("universe", "https://universe.mesosphere.com/repo")
 
-    system.scheduler.schedule(5 seconds, 5 seconds, configReader, GetRepository())
+    val bindingFuture = Http().bindAndHandle(new RestRouter().route(facade), "localhost", 8080)
   }
 
 }

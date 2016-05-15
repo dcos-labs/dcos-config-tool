@@ -28,52 +28,55 @@ class RestRouter extends Directives {
   def route(repoFacade: ActorRef) = {
     implicit val timeout = Timeout(5 seconds)
 
-    pathPrefix("webapp") {
-      get {
-        getFromResourceDirectory("assets")
-      }
-    }~
-    pathPrefix("api" / "repository") {
-
-      pathEndOrSingleSlash {
+    pathPrefix("") {
+      encodeResponse {
         get {
-          marshal {
-            (repoFacade ? GetRepositories()).mapTo[Repositories]
-          }
+          getFromResourceDirectory("assets")
         }
-      } ~
-        pathPrefix(Segment) {
-          repo =>
-            pathEndOrSingleSlash {
-              get {
-                marshal {
-                  (repoFacade ? GetRepository(repo)).mapTo[Repository]
-                }
+      }
+    } ~
+      pathPrefix("api" / "repository") {
+        encodeResponse {
+          pathEndOrSingleSlash {
+
+            get {
+              marshal {
+                (repoFacade ? GetRepositories()).mapTo[Repositories]
               }
-            } ~
-              pathPrefix(Segment) {
-                application =>
-                  pathEndOrSingleSlash {
-                    get {
-                      marshal {
-                        (repoFacade ? GetApplication(repo, application)).mapTo[Application]
-                      }
+            }
+          } ~
+            pathPrefix(Segment) {
+              repo =>
+                pathEndOrSingleSlash {
+                  get {
+                    marshal {
+                      (repoFacade ? GetRepository(repo)).mapTo[Repository]
                     }
-                  } ~ pathPrefix(Segment) {
-                    version =>
+                  }
+                } ~
+                  pathPrefix(Segment) {
+                    application =>
                       pathEndOrSingleSlash {
                         get {
                           marshal {
-                            (repoFacade ? GetApplicationVersion(repo, application, version)).mapTo[ApplicationVersion]
+                            (repoFacade ? GetApplication(repo, application)).mapTo[Application]
                           }
                         }
+                      } ~ pathPrefix(Segment) {
+                        version =>
+                          pathEndOrSingleSlash {
+                            get {
+                              marshal {
+                                (repoFacade ? GetApplicationVersion(repo, application, version)).mapTo[ApplicationVersion]
+                              }
+                            }
+                          }
                       }
+
                   }
-
-              }
-
+            }
         }
-    }
+      }
 
   }
 

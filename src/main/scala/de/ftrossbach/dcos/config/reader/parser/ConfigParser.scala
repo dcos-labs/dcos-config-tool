@@ -1,13 +1,13 @@
-package de.ftrossbach.dcos.config.reader
+package de.ftrossbach.dcos.config.reader.parser
 
 import akka.actor.{Actor, ActorLogging}
 import com.fasterxml.jackson.databind.JsonNode
 import com.lambdaworks.jacks.JacksMapper
 import de.ftrossbach.dcos.config.reader.ConfigReader.AddConfiguration
-import de.ftrossbach.dcos.config.reader.domain.{ArrayProperty, BooleanProperty, ConfigurationProperty, IntegerProperty, NumberProperty, ObjectProperty, StringProperty}
+
 import de.ftrossbach.dcos.config.reader.domain._
 
-import collection.JavaConverters._
+import scala.collection.JavaConverters._
 
 object ConfigParser {
 
@@ -25,7 +25,7 @@ class ConfigParser extends Actor with ActorLogging {
 
       val objectProperty = construct("", jsonNode, List()).map(_.asInstanceOf[ObjectProperty]).foreach(context.parent ! AddConfiguration(name, version, _))
 
-
+      context.stop(self)
     }
   }
 

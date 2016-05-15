@@ -45,7 +45,7 @@ class RepositoryFacade extends Actor {
     case GetApplication(repoName, applicationName) => {
       sender ! repositories.repositories.get(repoName).flatMap(repo => {
         repo.applications.get(applicationName)
-      }).getOrElse(Application(applicationName, Map()))
+      }).getOrElse(Application(repoName, applicationName, Map()))
     }
 
     case GetApplicationVersion(repositoryName, applicationName, applicationVersion) => {
@@ -53,7 +53,7 @@ class RepositoryFacade extends Actor {
         repo.applications.get(applicationName)
       }).flatMap(appl => {
         appl.versions.get(applicationVersion)
-      }).getOrElse(ApplicationVersion("UNKNOWN", ObjectProperty("UNKNOWN", None, List(), false)))
+      }).getOrElse(ApplicationVersion(repositoryName, applicationName, applicationVersion, ObjectProperty("UNKNOWN", None, List(), false)))
 
     }
   }

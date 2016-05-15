@@ -1,0 +1,60 @@
+<div>
+
+    <div ng-repeat="configObject in selectedAppProperties">
+
+        <div ng-switch="configObject.variableType">
+
+
+            <div ng-switch-when="object">
+                <div class="col-md-12"><h3>{{configObject.name}}</h3></div>
+                <div class="col-md-12" ng-if="configObject.description"><h4>{{configObject.description}}</h4></div>
+            </div>
+
+            <div ng-switch-when="array">
+                <!--TODO-->
+            </div>
+
+            <div ng-switch-default>
+                <table class="table">
+                    <tr>
+                        <td class="col-md-3">Name</td>
+                        <td class="col-md-9"><strong>{{configObject.name}}</strong></td>
+                    </tr>
+                    <tr ng-if="configObject.description">
+                        <td class="col-md-3">Description</td>
+                        <td class="col-md-9"> {{configObject.description}}</td>
+                    </tr>
+                    <tr ng-if="configObject.variableType">
+                        <td class="col-md-3">Type</td>
+                        <td class="col-md-9"> {{configObject.variableType}}</td>
+                    </tr>
+                    <tr ng-if="configObject.default">
+                        <td class="col-md-3">Default</td>
+                        <td class="col-md-9"> {{configObject.default}}</td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-3">Value</td>
+
+                        <td ng-switch="configObject.variableType">
+                            <input type="text" ng-model="configObject.value" ng-switch-when="string"/>
+                            <input type="number" ng-model="configObject.value" ng-switch-when="integer"/>
+                            <input type="number" ng-model="configObject.value" ng-switch-when="number"/>
+                            <input type="checkbox" ng-model="configObject.value" ng-switch-when="boolean"/>
+
+                        </td>
+                    </tr>
+
+
+                </table>
+
+
+            </div>
+
+        </div>
+
+
+        <hr>
+
+
+    </div>
+</div>

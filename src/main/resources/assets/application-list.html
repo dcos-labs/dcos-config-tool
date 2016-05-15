@@ -1,0 +1,19 @@
+<table class="table table-striped table-hover">
+    <thead>
+    <tr>
+        <td><strong>Application</strong></td>
+        <td><strong>Version</strong></td>
+
+    </tr>
+    <tbody>
+    </thead>
+
+
+    <tr ng-click="select(model)" ng-repeat="model in applicationList">
+        <td>{{model.name}}</td>
+        <td>{{model.packageVersion}}</td>
+
+    </tr>
+    </tbody>
+</table>
+

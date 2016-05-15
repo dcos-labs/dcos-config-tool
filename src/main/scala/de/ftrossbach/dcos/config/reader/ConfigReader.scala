@@ -70,7 +70,7 @@ class ConfigReader(name: String, url: String) extends Actor with ActorLogging{
 
     val list: List[(String, String, ObjectProperty)] = completeVersions.map(entry => (entry._1._1, entry._2._1.get, entry._2._2.get)).toList
 
-    val app: List[Application] = list.groupBy(triple => triple._1).map(groupedTriple => Application(groupedTriple._1, groupedTriple._2.map(x => x._2 -> ApplicationVersion(x._2, x._3)).toMap)).toList
+    val app: List[Application] = list.groupBy(triple => triple._1).map(groupedTriple => Application(name, groupedTriple._1, groupedTriple._2.map(x => x._2 -> ApplicationVersion(name, x._1, x._2, x._3)).toMap)).toList
 
     val appMap: Map[String, Application] = app.map(app => app.name -> app).toMap
     context.parent !  Repository(name, appMap)

@@ -4,9 +4,9 @@ package de.ftrossbach.dcos.config.reader.domain
 
 
 
-case class ApplicationVersion(packageVersion: String, config: ObjectProperty)
+case class ApplicationVersion(repositoryName: String, name: String, packageVersion: String, config: ObjectProperty)
 
-case class Application(name: String, versions: Map[String, ApplicationVersion])
+case class Application(repositoryName: String, name: String, versions: Map[String, ApplicationVersion])
 
 
 case class Repository(name: String, applications: Map[String, Application])

@@ -19,7 +19,7 @@ Start the application with docker:
 
 * Select an application version
 
-![The entry site](https://raw.githubusercontent.com/ftrossbach/dcos-config-tool/master/images/selectApplication.png)
+![The entry site](https://raw.githubusercontent.com/ftrossbach/dcos-config-tool/master/images/selectedApplication.png)
 
 * Select a property and provide a value
 

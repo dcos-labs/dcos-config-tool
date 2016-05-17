@@ -28,9 +28,13 @@ object Main {
     val facade = system.actorOf(Props[RepositoryFacade])
 
 
-    facade ! AddRepository("universe", "https://universe.mesosphere.com/repo")
+
 
     val bindingFuture = Http().bindAndHandle(new RestRouter().route(facade), "localhost", 8080)
+
+    bindingFuture.onSuccess({
+      case _ => facade ! AddRepository("universe", "https://universe.mesosphere.com/repo")
+    })
   }
 
 }

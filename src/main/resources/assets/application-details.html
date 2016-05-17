@@ -1,5 +1,8 @@
 <div>
 
+
+    <a ng-href="{{pageLink()}}" ng-if="appSelected">Get Config</a>
+
     <div ng-repeat="configObject in selectedAppProperties">
 
         <div ng-switch="configObject.variableType">
@@ -31,6 +34,11 @@
                     <tr ng-if="configObject.default">
                         <td class="col-md-3">Default</td>
                         <td class="col-md-9"> {{configObject.default}}</td>
+                    </tr>
+
+                    <tr>
+                        <td class="col-md-3">Use</td>
+                        <td class="col-md-9"><input type="checkbox" ng-model="configObject.use"/></td>
                     </tr>
                     <tr>
                         <td class="col-md-3">Value</td>

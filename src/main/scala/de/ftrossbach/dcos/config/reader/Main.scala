@@ -1,6 +1,6 @@
 package de.ftrossbach.dcos.config.reader
 
-import java.net.URL
+import java.net.{InetAddress, URL}
 
 import akka.actor.{ActorSystem, Props}
 import akka.http.scaladsl.Http
@@ -28,12 +28,18 @@ object Main {
     val facade = system.actorOf(Props[RepositoryFacade])
 
 
+    val localhost = InetAddress.getLocalHost
 
 
-    val bindingFuture = Http().bindAndHandle(new RestRouter().route(facade), "localhost", 8080)
+    val bindingFuture = Http().bindAndHandle(new RestRouter().route(facade), "0.0.0.0", 8080)
+
 
     bindingFuture.onSuccess({
-      case _ => facade ! AddRepository("universe", "https://universe.mesosphere.com/repo")
+      case _ => {
+
+        println(s"started on ${localhost.getHostAddress}")
+        facade ! AddRepository("universe", "https://universe.mesosphere.com/repo")
+      }
     })
   }
 

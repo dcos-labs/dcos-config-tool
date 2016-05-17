@@ -1,7 +1,9 @@
 <div>
 
 
-    <a ng-href="{{pageLink()}}" ng-if="appSelected">Get Config</a>
+    <h2>{{selectedAppVersion.name}} {{selectedAppVersion.packageVersion}}</h2>
+
+    <a ng-href="{{pageLink()}}" ng-if="appSelected">Generate Config with selected properties</a>
 
     <div ng-repeat="configObject in selectedAppProperties">
 

@@ -39,6 +39,7 @@ object Main {
 
         println(s"started on ${localhost.getHostAddress}")
         facade ! AddRepository("universe", "https://universe.mesosphere.com/repo")
+        facade ! AddRepository("universe-1.7", "https://universe.mesosphere.com/repo-1.7")
       }
     })
   }

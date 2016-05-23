@@ -29,8 +29,8 @@ module.controller('Controller', ['$scope', '$http', function($scope, $http) {
                }
 
                $scope.applicationList.sort(function(a,b){
-                  var aConcat = a.repository + a.version + a.name
-                  var bConcat = b.repository + b.version + b.name
+                  var aConcat = a.name + a.packageVersion
+                  var bConcat = b.name + b.packageVersion
 
                   return aConcat.localeCompare(bConcat)
 

@@ -1,4 +1,4 @@
-#DCOS CONFIG READER#
+#DCOS CONFIG TOOL#
 
 This project provides a basic interface to browse the Mesosphere Universe repository and add properties and values to
 generate a configuration file.

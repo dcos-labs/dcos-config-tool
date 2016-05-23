@@ -34,5 +34,7 @@ Start the application with docker:
 This is still very rough with hardly any error handling. Array properties and required parameters are also not handled yet.
 But it should work for a basic use case.
 
+##License
+The project is licensed under the Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0)
 
 

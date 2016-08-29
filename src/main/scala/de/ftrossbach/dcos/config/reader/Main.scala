@@ -38,8 +38,7 @@ object Main {
       case _ => {
 
         println(s"started on ${localhost.getHostAddress}")
-        facade ! AddRepository("universe", "https://universe.mesosphere.com/repo")
-        facade ! AddRepository("universe-1.7", "https://universe.mesosphere.com/repo-1.7")
+        facade ! AddRepository("universe", "https://github.com/mesosphere/universe/zipball/version-3.x")
       }
     })
   }

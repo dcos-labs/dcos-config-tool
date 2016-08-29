@@ -5,7 +5,9 @@
 
     <a ng-href="{{pageLink()}}" ng-if="appSelected">Generate Config with selected properties</a>
 
+    {{selectedAppProperties.size}}
     <div ng-repeat="configObject in selectedAppProperties">
+
 
         <div ng-switch="configObject.variableType">
 

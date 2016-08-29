@@ -9,24 +9,12 @@ module.controller('Controller', ['$scope', '$http', function($scope, $http) {
    $scope.selectedAppProperties = []
 
 
-    $http.get('/api/repository')
+    $http.get('/api/list')
           .then(function(response){
 
                $scope.applicationList = []
 
-               var repositories = response.data.repositories
-
-               for(repository in repositories){
-                   var applications = repositories[repository].applications
-                  for(appName in applications){
-                     var app = applications[appName]
-
-                     for(version in app.versions){
-
-                       $scope.applicationList.push(app.versions[version])
-                     }
-                  }
-               }
+                $scope.applicationList = response.data
 
                $scope.applicationList.sort(function(a,b){
                   var aConcat = a.name + a.packageVersion
@@ -45,7 +33,7 @@ module.controller('Controller', ['$scope', '$http', function($scope, $http) {
 module.directive('applicationList', function() {
   return {
     templateUrl: 'application-list.html',
-    controller: function($scope){
+    controller: function($scope, $http){
 
        var flattenProperties = function(config, acc){
 
@@ -84,13 +72,21 @@ module.directive('applicationList', function() {
 
        $scope.select = function(model) {
 
-         $scope.appSelected = true
 
-         $scope.selectedAppVersion = model
 
-         $scope.selectedAppProperties = []
+         $http.get('/api/repository/' + model.repositoryName + "/" + model.name + "/" + model.packageVersion)
+          .then(function(response){
+             $scope.appSelected = true
+             $scope.selectedAppVersion = response.data
+             $scope.selectedAppProperties = []
+             flattenProperties($scope.selectedAppVersion.config, $scope.selectedAppProperties)
 
-         flattenProperties(model.config, $scope.selectedAppProperties)
+
+            },
+          function(){})
+
+
+
 
 
        }

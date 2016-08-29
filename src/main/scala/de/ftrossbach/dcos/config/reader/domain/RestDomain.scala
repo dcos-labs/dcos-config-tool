@@ -2,7 +2,7 @@ package de.ftrossbach.dcos.config.reader.domain
 
 
 
-
+case class ApplicationVersionWithoutConfig(repositoryName: String, name: String, packageVersion: String)
 
 case class ApplicationVersion(repositoryName: String, name: String, packageVersion: String, config: ObjectProperty)
 

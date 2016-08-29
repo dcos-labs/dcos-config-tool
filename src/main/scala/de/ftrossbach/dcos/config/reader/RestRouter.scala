@@ -29,18 +29,26 @@ class RestRouter extends Directives {
   def route(repoFacade: ActorRef) = {
     implicit val timeout = Timeout(5 seconds)
 
+
+
     pathPrefix("") {
-      encodeResponse {
-        get {
-          getFromResourceDirectory("assets")
+
+      pathEndOrSingleSlash {
+        redirect("/index.html", StatusCodes.PermanentRedirect)
+      } ~
+        encodeResponse {
+          get {
+            getFromResourceDirectory("assets")
+          }
         }
-      }
     } ~
       pathPrefix("api" / "repository") {
+
         encodeResponse {
           pathEndOrSingleSlash {
 
             get {
+
               marshal {
                 (repoFacade ? GetRepositories()).mapTo[Repositories]
               }
@@ -79,13 +87,8 @@ class RestRouter extends Directives {
         }
       } ~
       path("api" / "generate") {
-
         get {
           parameterSeq { params => {
-
-
-
-
             marshal {
               Future({
                 val acc = mutable.HashMap.empty[String, Any]
@@ -95,9 +98,25 @@ class RestRouter extends Directives {
 
             }
           }
-
           }
-        }
+        } }~
+          path("api" / "list") {
+            get {
+
+              marshal {
+                (repoFacade ? GetRepositories()).mapTo[Repositories].map(repositories => {
+
+                  val versions: Iterable[ApplicationVersion] = for (repo <- repositories.repositories;
+                                                                    app <- repo._2.applications;
+                                                                    appVer <- app._2.versions
+                  ) yield appVer._2
+
+                  versions.map(ver => ApplicationVersionWithoutConfig(ver.repositoryName, ver.name, ver.packageVersion))
+
+
+                })
+              }
+            }
 
       }
 
@@ -111,9 +130,9 @@ class RestRouter extends Directives {
 
       case head :: tail => {
 
-        val strippedHead = if(head._1.startsWith("/"))  head._1.substring(1) else head._1
+        val strippedHead = if (head._1.startsWith("/")) head._1.substring(1) else head._1
 
-        val segments: Array[String]= strippedHead.split("/")
+        val segments: Array[String] = strippedHead.split("/")
 
         val reverse = segments.reverse
         val valueType = reverse.head
@@ -128,7 +147,6 @@ class RestRouter extends Directives {
         paramsToMap(tail, acc)
 
 
-
       }
 
     }
@@ -137,7 +155,7 @@ class RestRouter extends Directives {
   }
 
 
-  def applyParamToMap(name: String, value: String, valType: String, path: List[String], current: mutable.HashMap[String, Any]): Unit ={
+  def applyParamToMap(name: String, value: String, valType: String, path: List[String], current: mutable.HashMap[String, Any]): Unit = {
 
     path match {
       case Nil => {
@@ -145,13 +163,14 @@ class RestRouter extends Directives {
           case "s" => current += (name -> value)
           case "d" => current += (name -> value.toDouble)
           case "i" => current += (name -> value.toInt)
+          case "n" => current += (name -> value.toInt)
           case "b" => current += (name -> value.toBoolean)
         }
       }
 
       case head :: tail => {
 
-        if(current.contains(head)){
+        if (current.contains(head)) {
           applyParamToMap(name, value, valType, tail, current.get(head).get.asInstanceOf[mutable.HashMap[String, Any]])
         } else {
           val newMap = mutable.HashMap.empty[String, Any]

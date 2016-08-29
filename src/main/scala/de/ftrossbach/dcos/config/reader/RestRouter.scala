@@ -163,7 +163,7 @@ class RestRouter extends Directives {
           case "s" => current += (name -> value)
           case "d" => current += (name -> value.toDouble)
           case "i" => current += (name -> value.toInt)
-          case "n" => current += (name -> value.toInt)
+          case "n" => current += (name -> value.toDouble)
           case "b" => current += (name -> value.toBoolean)
         }
       }

@@ -5,7 +5,9 @@ generate a configuration file.
 
 ##Starting the application
 
-Start the application with docker:
+The tool is now hosted at http://www.dcos-package-browser.io
+
+If you want to start it locally with docker:
 
 `docker run -p 8080:8080 -d ftrossbach/dcos-config-reader`
 
